@@ -1,238 +1,32 @@
-# Lunar Calendar MCP Server
+# lunar-mcp — Chinese lunar calendar + BaZi MCP server
 
-[![GitHub Repository](https://img.shields.io/badge/GitHub-AlbertHuangKSFO/lunar_mcp_server-blue?style=flat&logo=github)](https://github.com/AlbertHuangKSFO/lunar_mcp_server)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
-[![MCP Server](https://img.shields.io/badge/MCP-Server-green.svg)](https://modelcontextprotocol.io/)
-[![GitHub stars](https://img.shields.io/github/stars/AlbertHuangKSFO/lunar_mcp_server.svg?style=social&label=Star)](https://github.com/AlbertHuangKSFO/lunar_mcp_server)
-[![GitHub forks](https://img.shields.io/github/forks/AlbertHuangKSFO/lunar_mcp_server.svg?style=social&label=Fork)](https://github.com/AlbertHuangKSFO/lunar_mcp_server/fork)
+> An MCP server for lunar calendar operations and BaZi calculations. Solar↔lunar conversion, auspicious day guidance, 24 Solar Terms, Five Elements analysis — all accessible to any MCP-compatible agent.
 
-[中文](README.cn.md) | **English** | [语言选择/Language](LANGUAGE.md)
+[![OpenClaw Skill](https://img.shields.io/badge/OpenClaw-Skill-blueviolet)](https://github.com/NachaFromMars)
 
-A Model Context Protocol (MCP) server for Chinese traditional calendar functions, built with Python 3.12 and lunar-python.
+## Overview
+lunar-mcp is a Model Context Protocol server that exposes Chinese lunar calendar and BaZi (Four Pillars) tools to AI agents. It handles solar-to-lunar and lunar-to-solar date conversion, generates Huang Li (auspicious day) guidance, calculates BaZi charts, tracks the 24 Solar Terms (節氣), and analyzes Five Elements composition. Based on [AlbertHuangKSFO/lunar_mcp_server](https://github.com/AlbertHuangKSFO/lunar_mcp_server) (MIT).
 
 ## Features
+- **BaZi calculation** — Four Pillars from birth date
+- **Date conversion** — solar ↔ lunar calendar
+- **Huang Li** — auspicious and inauspicious day guidance
+- **Daily fortune** — daily luck overview
+- **24 Solar Terms** — 節氣 tracking
+- **Five Elements** — Ngũ Hành composition analysis
+- **MCP protocol** — works with any MCP-compatible agent
 
-🎋 **BaZi Calculation** - Calculate eight characters for fortune telling  
-📅 **Calendar Conversion** - Convert between solar and lunar calendars  
-🌙 **Huangli Query** - Chinese almanac with daily recommendations  
-🔮 **Daily Fortune** - Daily fortune and recommendations  
-⭐ **Solar Terms** - Query 24 solar terms for any year  
-🧮 **Wu Xing Analysis** - Five elements analysis from birth info  
-
-## Installation
-
-### Prerequisites
-
-- Python 3.12+
-- uv package manager
-
-### Setup
-
-1. **Clone the repository:**
+## Usage / Quick Start
 ```bash
-git clone <repository-url>
-cd lunar-mcp-server
+pip install lunar-python
+# then connect via MCP protocol
 ```
 
-2. **Install uv (if not already installed):**
-```bash
-curl -LsSf https://astral.sh/uv/install.sh | sh
-```
+## Trigger Keywords (OpenClaw)
+lịch âm, âm lịch, lunar calendar, hoàng lịch, tiết khí, solar terms, ngũ hành, five elements, bazi calculation, 农历, 黄历
 
-3. **Install project with dependencies:**
-```bash
-uv sync
-```
-
-This will automatically:
-- Create a virtual environment with Python 3.12
-- Install all dependencies from pyproject.toml
-- Generate uv.lock for reproducible builds
-
-## Usage
-
-### As MCP Server
-
-Configure in your MCP client (e.g., Claude Desktop):
-
-```json
-{
-  "mcpServers": {
-    "lunar-calendar": {
-      "command": "uv",
-      "args": ["run", "python", "-m", "src.server"],
-      "cwd": "/path/to/lunar-mcp-server"
-    }
-  }
-}
-```
-
-### Direct Usage
-
-You can also use the helper functions directly:
-
-```bash
-# Run with uv
-uv run python -c "
-from src.utils import LunarHelper
-result = LunarHelper.solar_to_lunar(2024, 1, 1)
-print(result['lunar_date_chinese'])  # 二〇二三年冬月二十
-"
-
-# Calculate BaZi
-uv run python -c "
-from src.utils import LunarHelper
-result = LunarHelper.get_bazi(1990, 1, 1, 8, 30)
-print(result['bazi_string'])  # 己巳 丙子 丙寅 壬辰
-"
-```
-
-## Available Tools
-
-### 1. bazi_calculate
-
-Calculate BaZi (Eight Characters) for fortune telling.
-
-**Parameters:**
-- `birth_date`: Birth date in YYYY-MM-DD format
-- `birth_time`: Birth time in HH:MM format
-
-**Example:**
-```json
-{
-  "birth_date": "1990-01-01",
-  "birth_time": "08:30"
-}
-```
-
-### 2. calendar_convert
-
-Convert between solar and lunar calendars.
-
-**Parameters:**
-- `date`: Date in YYYY-MM-DD format
-- `convert_to`: "lunar" or "solar"
-- `is_leap`: Is leap month (optional)
-
-**Example:**
-```json
-{
-  "date": "2024-01-01",
-  "convert_to": "lunar"
-}
-```
-
-### 3. huangli_query
-
-Query Chinese almanac information for a specific date.
-
-**Parameters:**
-- `date`: Date in YYYY-MM-DD format
-
-**Example:**
-```json
-{
-  "date": "2024-01-01"
-}
-```
-
-### 4. fortune_daily
-
-Get daily fortune and recommendations.
-
-**Parameters:**
-- `date`: Date in YYYY-MM-DD format
-
-**Example:**
-```json
-{
-  "date": "2024-01-01"
-}
-```
-
-### 5. jieqi_query
-
-Query 24 solar terms for a specific year.
-
-**Parameters:**
-- `year`: Year to query
-
-**Example:**
-```json
-{
-  "year": 2024
-}
-```
-
-### 6. wuxing_analyze
-
-Analyze Wu Xing (Five Elements) from birth information.
-
-**Parameters:**
-- `birth_date`: Birth date in YYYY-MM-DD format
-- `birth_time`: Birth time in HH:MM format
-
-**Example:**
-```json
-{
-  "birth_date": "1990-01-01",
-  "birth_time": "08:30"
-}
-```
-
-## Development
-
-### Running Tests
-
-```bash
-# Quick functionality test
-uv run python quick_test.py
-
-# Run MCP server
-uv run python run_server.py
-
-# Test specific functionality
-uv run python -c "from src.utils import LunarHelper; print('✅ Import works!')"
-
-# Install dev dependencies (optional)
-uv add --dev pytest black mypy
-```
-
-### Code Formatting
-
-```bash
-# Format code
-black src/
-isort src/
-
-# Type checking
-mypy src/
-```
-
-## Dependencies
-
-- **mcp**: Model Context Protocol implementation
-- **lunar-python**: Chinese lunar calendar library
-- **pydantic**: Data validation and settings management
-
-## Contributing
-
-1. Fork the repository
-2. Create your feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a Pull Request
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Acknowledgments
-
-- [lunar-python](https://github.com/6tail/lunar-python) - Excellent Chinese lunar calendar library
-- [MCP](https://modelcontextprotocol.io/) - Model Context Protocol specification
+## Related Skills
+- [destiny-engine](https://github.com/NachaFromMars/destiny-engine) — full BaZi + Western astrology analysis
 
 ---
-
-**Note:** This is a traditional calendar tool for educational and entertainment purposes. Please use responsibly.
+Part of the [NachaFromMars](https://github.com/NachaFromMars) OpenClaw skill ecosystem.
